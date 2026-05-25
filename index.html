@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>浙江省三甲/三乙医院护理实习查询系统</title>
-<meta name="description" content="浙江省93家三级医院护理实习查询工具，覆盖全省11个城市，支持城市筛选、偏好匹配与薪资参考">
+<meta name="description" content="浙江省138家三级医院护理实习查询工具，覆盖全省11个城市，支持城市筛选、偏好匹配与薪资参考">
 <style>
   :root {
     --primary: #2563eb;
@@ -299,7 +299,7 @@
 
 <div class="header">
   <h1>浙江省三级医院护理实习查询系统</h1>
-  <p>覆盖全省11个城市 &middot; 93家三甲/三乙医院 &middot; 智能偏好推荐 &middot; 薪资参考</p>
+  <p>覆盖全省11个城市 &middot; 138家三甲/三乙医院 &middot; 智能偏好推荐 &middot; 薪资参考</p>
 </div>
 
 <div class="container">
@@ -365,9 +365,9 @@
 <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="返回顶部">&#8593;</button>
 
 <script>
-// ====== 医院数据（共93条） ======
+// ====== 医院数据（共138条） ======
 var hospitals = [
-  // ======== 杭州 (24家) ========
+  // ======== 杭州 (40家) ========
   {id:1,name:"浙江大学医学院附属第一医院",city:"杭州",level:"三甲",address:"杭州市上城区庆春路79号",depts:["肝胆胰外科","感染科","血液科","器官移植","ICU"],pros:["病种丰富","操作机会中等","带教体系规范"],cons:["工作强度极大","夜班频繁","住宿紧张"],口碑:"全国顶尖教学医院，实习含金量高但压力大",url:"www.zy91.com",tags:["hands-on","teaching","platform","emergency"],salary:"实习生无工资，部分科室有夜班补贴（约30-50元/晚）；留用后年薪约12-18万（含五险一金）"},
   {id:2,name:"浙江大学医学院附属第二医院",city:"杭州",level:"三甲",address:"杭州市上城区解放路88号",depts:["心血管内科","神经外科","骨科","急诊医学","烧伤科"],pros:["急诊和ICU操作机会多","护理部培训系统"],cons:["人流量大","夜班强度高","无宿舍需自行租房"],口碑:"带教严谨，全国考核名列前茅，口碑极佳",url:"www.z2hospital.com",tags:["hands-on","teaching","platform","emergency"],salary:"实习生无工资，夜班补贴约40-60元/晚；留用后年薪约14-20万，浙大体系福利好"},
   {id:3,name:"浙江大学医学院附属邵逸夫医院",city:"杭州",level:"三甲",address:"杭州市上城区庆春东路3号",depts:["微创外科","肿瘤内科","妇产科","消化内科"],pros:["管理先进(中美合作)","人文关怀好","护理理念国际化"],cons:["实习生竞争激烈","留用门槛高"],口碑:"护理管理全国标杆，对实习生尊重度高",url:"www.srrsh.com",tags:["teaching","platform","specialty"],salary:"实习生无工资；留用后年薪约13-18万，中美合作背景培训资源丰富"},
@@ -393,7 +393,7 @@ var hospitals = [
   {id:23,name:"杭州市富阳区第一人民医院",city:"杭州",level:"三乙",address:"杭州市富阳区北环路429号",depts:["骨科","神经内科","心血管内科"],pros:["区级条件较好","骨科特色"],cons:["离杭州市区较远"],口碑:"富阳地区首选，本地实习生留用比例高",url:"待补充",tags:["retention","moderate","dorm"],salary:"实习生无工资，部分提供住宿；留用后年薪约9-12万"},
   {id:24,name:"浙江骨伤医院",city:"杭州",level:"三乙",address:"杭州市拱墅区祥符街道莫干山路2191号",depts:["骨伤科","康复科"],pros:["骨伤专科操作多","中医正骨特色"],cons:["民营性质","综合科室缺乏"],口碑:"民营专科医院，适合定向骨伤护理",url:"待补充",tags:["hands-on","specialty"],salary:"实习生可能有一定补贴（约500-1000元/月，民营较灵活）；留用后年薪约8-12万"},
 
-  // ======== 宁波 (14家) ========
+  // ======== 宁波 (25家) ========
   {id:25,name:"宁波市医疗中心李惠利医院",city:"宁波",level:"三甲",address:"宁波市鄞州区兴宁路57号",depts:["心血管内科","心胸外科","肝胆胰外科"],pros:["设备先进","手术室实习含金量高"],cons:["节奏快","夜班强度大"],口碑:"宁波综合实力最强之一，实习认可度高",url:"www.nblhl.com",tags:["hands-on","teaching","platform","emergency"],salary:"实习生无工资；留用后年薪约12-17万，宁波经济发达待遇好"},
   {id:26,name:"宁波大学附属第一医院",city:"宁波",level:"三甲",address:"宁波市海曙区柳汀街59号",depts:["泌尿外科","心血管内科","神经外科"],pros:["大学附属教学规范","病例丰富"],cons:["院区老旧","空间拥挤"],口碑:"宁波老牌三甲，教学底蕴深厚",url:"www.nbdyyy.com",tags:["teaching","platform","hands-on"],salary:"实习生无工资；留用后年薪约11-16万"},
   {id:27,name:"宁波市第二医院",city:"宁波",level:"三甲",address:"宁波市海曙区西北街41号",depts:["烧伤科","骨科","肿瘤科"],pros:["烧伤护理特色明显","有宿舍可申请"],cons:["部分科室实习生超编"],口碑:"烧伤科护理全国知名，骨科也不错",url:"www.nbdeyy.com",tags:["specialty","dorm","hands-on"],salary:"实习生无工资，可申请宿舍；留用后年薪约11-15万"},
@@ -403,25 +403,25 @@ var hospitals = [
   {id:31,name:"余姚市人民医院",city:"宁波",level:"三乙",address:"宁波市余姚市城东路800号",depts:["心血管内科","骨科","急诊科"],pros:["县市级龙头","操作上手快"],cons:["远离宁波市区","教学资源有限"],口碑:"余姚本地首选，留用比例高",url:"www.yyhospital.com",tags:["hands-on","retention","dorm"],salary:"实习生无工资，部分提供住宿；留用后年薪约9-13万"},
   {id:32,name:"慈溪市人民医院",city:"宁波",level:"三乙",address:"宁波市慈溪市浒山街道南二环路999号",depts:["骨科","心血管内科","妇产科"],pros:["经济发达病人量足","动手机会多"],cons:["距离宁波主城区远"],口碑:"慈溪本地实习生多，就业留用机会好",url:"www.cxhospital.com",tags:["hands-on","retention","dorm"],salary:"实习生无工资，部分提供住宿；留用后年薪约10-14万，慈溪百强县待遇较好"},
   {id:33,name:"象山县第一人民医院",city:"宁波",level:"三乙",address:"宁波市象山县丹东街道东谷路291号",depts:["骨科","心血管内科"],pros:["基层锻炼全面","老师愿放手"],cons:["海岛县位置偏远"],口碑:"规模偏小但人际关系融洽",url:"待补充",tags:["hands-on","moderate","less-night"],salary:"实习生无工资，部分提供住宿；留用后年薪约8-11万"},
-  {id:34,name:"宁波市鄞州人民医院",city:"宁波",level:"三乙",address:"宁波市鄞州区百丈东路251号",depts:["消化内科","神经内科","骨科"],pros:["鄞州区中心","病人量充足"],cons:["在市区三甲光环下存在感偏弱"],口碑:"区级医院中条件不错",url:"www.yzwsy.com",tags:["moderate","retention"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:34,name:"宁波大学附属人民医院",city:"宁波",level:"三甲",address:"宁波市鄞州区百丈东路251号",depts:["消化内科","神经内科","骨科"],pros:["鄞州区中心","病人量充足"],cons:["在市区三甲光环下存在感偏弱"],口碑:"区级医院中条件不错，近年快速发展",url:"www.yzwsy.com",tags:["teaching","hands-on","platform"],salary:"实习生无工资；留用后年薪约11-16万"},
   {id:35,name:"宁波市鄞州区第二医院",city:"宁波",level:"三乙",address:"宁波市鄞州区前河北路998号",depts:["泌尿外科","肾内科"],pros:["泌尿/肾内专科特色","环境较新"],cons:["综合实力一般"],口碑:"泌尿专科护理有亮点",url:"待补充",tags:["specialty","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
   {id:36,name:"宁波市北仑区人民医院",city:"宁波",level:"三乙",address:"宁波市北仑区庐山东路1288号",depts:["骨科","普外科","心血管内科"],pros:["港口工业区外伤/急诊多"],cons:["离宁波市中心较远"],口碑:"急诊/创伤护理经验丰富",url:"待补充",tags:["hands-on","emergency"],salary:"实习生无工资；留用后年薪约10-14万"},
   {id:37,name:"宁波市康复医院",city:"宁波",level:"三乙",address:"宁波市鄞州区桑田路502号",depts:["康复医学","神经康复","骨伤康复"],pros:["康复护理上手快","治疗师配合好"],cons:["无急症经验积累"],口碑:"康复护理方向性价比较高",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-12万，康复科加班少"},
   {id:38,name:"宁波市眼科医院",city:"宁波",level:"三乙",address:"宁波市鄞州区民安路855号",depts:["眼科","白内障","屈光手术"],pros:["眼科护理精细","环境好"],cons:["专科面窄"],口碑:"眼科护理就业方向明确",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-12万，眼科门诊双休"},
 
-  // ======== 温州 (10家) ========
+  // ======== 温州 (18家) ========
   {id:39,name:"温州医科大学附属第一医院",city:"温州",level:"三甲",address:"温州市瓯海区南白象上蔡村",depts:["急诊医学","心血管内科","神经外科","呼吸内科"],pros:["浙南闽北最大","病种极丰富","ICU/急诊操作机会多"],cons:["病人量巨大","夜班频繁"],口碑:"浙南医学殿堂，实习含金量极高",url:"www.wzhospital.cn",tags:["hands-on","platform","teaching","emergency"],salary:"实习生无工资；留用后年薪约12-18万，浙南龙头福利体系完善"},
   {id:40,name:"温州医科大学附属第二医院",city:"温州",level:"三甲",address:"温州市鹿城区学院西路109号",depts:["儿科","骨科","妇产科","麻醉科"],pros:["儿科护理全国领先","带教体系完善"],cons:["多院区奔波","工作强度大"],口碑:"儿科方向全国标杆，护理实习首选",url:"www.wzhealth.com",tags:["hands-on","teaching","platform","specialty"],salary:"实习生无工资；留用后年薪约11-17万，儿科护理岗位较多"},
   {id:41,name:"温州市中心医院",city:"温州",level:"三甲",address:"温州市鹿城区百里东路252号",depts:["肿瘤科","心血管内科","神经内科"],pros:["老牌市属三甲","本地认可度高"],cons:["省级医院光环下资源倾斜少"],口碑:"市属龙头，中规中矩但有留用机会",url:"www.wzhosp.com",tags:["retention","moderate"],salary:"实习生无工资；留用后年薪约10-14万"},
   {id:42,name:"温州市人民医院",city:"温州",level:"三甲",address:"温州市鹿城区仓后街57号",depts:["妇产科","消化内科","心血管内科"],pros:["妇产科特色强","市区位置便利"],cons:["院区老旧","宿舍条件一般"],口碑:"妇产科实习体验好，适合该方向",url:"www.wzsrmyy.com",tags:["specialty","dorm"],salary:"实习生无工资；留用后年薪约10-14万"},
   {id:43,name:"温州市中医院",city:"温州",level:"三甲",address:"温州市鹿城区六虹桥蛟尾路9号",depts:["中医肾病科","中医妇科","针灸推拿科"],pros:["中医护理特色","针灸推拿上手机会多"],cons:["西医急症偏少"],口碑:"浙南中医护理首选",url:"www.wzszyy.com",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
   {id:44,name:"温州医科大学附属口腔医院",city:"温州",level:"三甲",address:"温州市鹿城区学院西路373号",depts:["口腔种植","正畸","颌面外科"],pros:["口腔专科护理规范"],cons:["招生规模小","名额少"],口碑:"口腔护理方向精品教学",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约10-15万，口腔门诊双休"},
-  {id:45,name:"瑞安市人民医院",city:"温州",level:"三乙",address:"温州市瑞安市万松路108号",depts:["心血管内科","骨科","神经内科"],pros:["全国最强县医院之一","病例多","操作多"],cons:["距离温州市区远"],口碑:"全国最强县级医院之一，实习性价比高",url:"www.rahos.gov.cn",tags:["hands-on","retention"],salary:"实习生无工资；留用后年薪约10-14万，百强县待遇好"},
+  {id:45,name:"瑞安市人民医院",city:"温州",level:"三甲",address:"温州市瑞安市万松路108号",depts:["心血管内科","骨科","神经内科"],pros:["全国最强县医院之一","病例多","操作多"],cons:["距离温州市区远"],口碑:"已升级三甲，全国最强县级医院之一，实习性价比高",url:"www.rahos.gov.cn",tags:["hands-on","retention","platform"],salary:"实习生无工资；留用后年薪约11-17万，百强县待遇好"},
   {id:46,name:"乐清市人民医院",city:"温州",level:"三乙",address:"温州市乐清市清远路338号",depts:["心血管内科","骨科","妇产科"],pros:["经济发达病人量足"],cons:["离温州市区远"],口碑:"乐清本地认可度高，留用有优势",url:"待补充",tags:["hands-on","retention"],salary:"实习生无工资；留用后年薪约9-13万"},
   {id:47,name:"平阳县人民医院",city:"温州",level:"三乙",address:"温州市平阳县昆阳镇雅河路112号",depts:["骨科","心血管内科"],pros:["基层锻炼全面"],cons:["县域经济偏弱","待遇一般"],口碑:"本县生源为主，外地吸引力有限",url:"待补充",tags:["hands-on","moderate","retention"],salary:"实习生无工资；留用后年薪约8-10万"},
   {id:48,name:"苍南县人民医院",city:"温州",level:"三乙",address:"温州市苍南县灵溪镇玉苍路2288号",depts:["骨科","心血管内科","急诊科"],pros:["新院区硬件好","操作机会多"],cons:["浙江最南端较偏远"],口碑:"近年快速发展，硬件升级明显",url:"待补充",tags:["hands-on","retention","dorm"],salary:"实习生无工资，新院区可能有宿舍；留用后年薪约8-11万"},
 
-  // ======== 绍兴 (8家) ========
+  // ======== 绍兴 (11家) ========
   {id:49,name:"绍兴市人民医院",city:"绍兴",level:"三甲",address:"绍兴市越城区中兴北路568号",depts:["心血管内科","神经外科","骨科","消化内科"],pros:["绍兴综合最强","病例丰富","教学规范"],cons:["省级龙头近杭州有虹吸效应"],口碑:"绍兴地区首选，综合实力过硬",url:"www.sxhospital.com",tags:["hands-on","teaching","platform"],salary:"实习生无工资；留用后年薪约11-16万"},
   {id:50,name:"诸暨市人民医院",city:"绍兴",level:"三甲",address:"绍兴市诸暨市暨阳街道浣纱南路122号",depts:["骨科","心血管内科","神经内科"],pros:["县级医院实力突出","2022年新晋三甲"],cons:["诸暨离绍兴市区较远"],口碑:"县级医院标杆，近年进步显著",url:"www.zjsrmyy.com",tags:["hands-on","retention"],salary:"实习生无工资；留用后年薪约10-14万，诸暨经济好待遇不错"},
   {id:51,name:"绍兴市中医院",city:"绍兴",level:"三甲",address:"绍兴市越城区人民中路641号",depts:["中医骨伤科","针灸推拿科"],pros:["中医骨伤特色","推拿上手快"],cons:["西医综合偏弱"],口碑:"中医骨伤方向有地域特色",url:"www.sxzyyy.com",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
@@ -431,7 +431,7 @@ var hospitals = [
   {id:55,name:"绍兴市上虞人民医院",city:"绍兴",level:"三乙",address:"绍兴市上虞区百官街道市民大道517号",depts:["心血管内科","骨科","妇产科"],pros:["上虞区龙头","硬件不错"],cons:["距离越城区较远"],口碑:"上虞本地首选，发展稳定",url:"待补充",tags:["retention","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
   {id:56,name:"嵊州市人民医院",city:"绍兴",level:"三乙",address:"绍兴市嵊州市三江街道丹桂路666号",depts:["心血管内科","骨科"],pros:["基层操作机会多"],cons:["县级市偏远"],口碑:"本地生源为主",url:"待补充",tags:["hands-on","retention","dorm"],salary:"实习生无工资；留用后年薪约8-11万"},
 
-  // ======== 嘉兴 (7家) ========
+  // ======== 嘉兴 (8家) ========
   {id:57,name:"嘉兴市第一医院",city:"嘉兴",level:"三甲",address:"嘉兴市南湖区中环南路1882号",depts:["心血管内科","呼吸内科","肿瘤科","骨科"],pros:["嘉兴综合最强","新院区环境好"],cons:["靠近沪杭人才虹吸"],口碑:"嘉兴地区标杆，近年快速发展",url:"www.jxdyyy.com",tags:["platform","hands-on","teaching"],salary:"实习生无工资；留用后年薪约11-16万"},
   {id:58,name:"嘉兴市第二医院",city:"嘉兴",level:"三甲",address:"嘉兴市南湖区环城北路1518号",depts:["神经内科","骨科","康复医学科"],pros:["康复医学有特色","教学规范"],cons:["规模在省内三甲中偏小"],口碑:"康复护理方向在浙北有口碑",url:"www.jxdeyy.com",tags:["specialty","teaching","moderate"],salary:"实习生无工资；留用后年薪约10-14万"},
   {id:59,name:"嘉兴市中医院",city:"嘉兴",level:"三甲",address:"嘉兴市南湖区中山东路1501号",depts:["中医内科","中医妇科","针灸推拿科"],pros:["中医护理上手快","有宿舍"],cons:["急危重症少"],口碑:"嘉兴中医护理首选",url:"www.jxzyy.cn",tags:["specialty","dorm","less-night","moderate"],salary:"实习生无工资，可能有宿舍；留用后年薪约10-13万"},
@@ -446,7 +446,7 @@ var hospitals = [
   {id:66,name:"湖州市第三人民医院",city:"湖州",level:"三甲",address:"湖州市吴兴区苕溪东路2088号",depts:["精神卫生科","心理科","老年精神科"],pros:["精神专科护理深入","省内知名"],cons:["病种单一"],口碑:"浙北精神卫生中心，专科护理有保障",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
   {id:67,name:"长兴县人民医院",city:"湖州",level:"三乙",address:"湖州市长兴县太湖中路66号",depts:["心血管内科","骨科","呼吸内科"],pros:["长兴经济好","硬件新","与浙二合作"],cons:["县级医院平台有限"],口碑:"县域中条件较好，有浙二帮扶背景",url:"待补充",tags:["retention","dorm","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
 
-  // ======== 金华 (6家) ========
+  // ======== 金华 (7家) ========
   {id:68,name:"金华市中心医院",city:"金华",level:"三甲",address:"金华市婺城区人民东路365号",depts:["心血管内科","骨科","神经外科","急诊科"],pros:["金华综合最强","病例量大","教学体系完善"],cons:["浙中资源有限高端病例外流"],口碑:"浙中医学中心，金华地区首选",url:"www.jhzxyy.com",tags:["hands-on","teaching","platform","emergency"],salary:"实习生无工资；留用后年薪约11-16万"},
   {id:69,name:"东阳市人民医院",city:"金华",level:"三甲",address:"金华市东阳市吴宁西路60号",depts:["骨科","心血管内科","神经内科"],pros:["全国县级标杆","管理先进"],cons:["东阳非地级市中心"],口碑:"全国县级医院典范，管理理念值得学习",url:"www.dyhospital.com",tags:["teaching","moderate","retention"],salary:"实习生无工资；留用后年薪约10-14万，医院管理好"},
   {id:70,name:"义乌市中心医院",city:"金华",level:"三甲",address:"金华市义乌市江东路699号",depts:["心血管内科","骨科","急诊科"],pros:["义乌经济强病人足量","2023新晋三甲"],cons:["与浙四竞争患者"],口碑:"近年快速崛起，发展势头好",url:"www.ywzxyy.com",tags:["hands-on","retention"],salary:"实习生无工资；留用后年薪约11-16万，义乌经济强待遇好"},
@@ -454,18 +454,18 @@ var hospitals = [
   {id:72,name:"金华市人民医院",city:"金华",level:"三乙",address:"金华市婺城区新华街228号",depts:["妇产科","心血管内科","骨科"],pros:["妇产科特色","市区地理位置好"],cons:["为中心医院辐射下存在感偏弱"],口碑:"妇产科护理在当地有口碑",url:"www.jhhospital.com",tags:["specialty","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
   {id:73,name:"永康市第一人民医院",city:"金华",level:"三乙",address:"金华市永康市金山西路599号",depts:["骨科","心血管内科"],pros:["百强县经济好","硬件新"],cons:["离金华市区远"],口碑:"永康本地认可度高，就业留用稳定",url:"待补充",tags:["retention","dorm"],salary:"实习生无工资；留用后年薪约9-13万"},
 
-  // ======== 衢州 (4家) ========
+  // ======== 衢州 (5家) ========
   {id:74,name:"衢州市人民医院",city:"衢州",level:"三甲",address:"衢州市柯城区闽江大道100号",depts:["心血管内科","神经外科","骨科"],pros:["衢州唯一综合三甲","病种集中","新院区硬件好"],cons:["浙西经济偏弱","高端人才引进难"],口碑:"衢州龙头，在当地无可替代",url:"www.qzhospital.com",tags:["platform","hands-on","retention"],salary:"实习生无工资；留用后年薪约10-14万"},
   {id:75,name:"衢州市中医医院",city:"衢州",level:"三甲",address:"衢州市柯城区衢化路117号",depts:["中医内科","针灸推拿","中医肾病科"],pros:["中医护理有特色"],cons:["规模在省内三甲中偏小"],口碑:"浙西中医首选",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
   {id:76,name:"浙江衢化医院",city:"衢州",level:"三乙",address:"衢州市柯城区衢化街道文昌路62号",depts:["烧伤科","职业病科"],pros:["烧伤/职业病护理特色明显"],cons:["原企业医院转型","综合实力有限"],口碑:"烧伤护理方向有独特优势",url:"待补充",tags:["specialty","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
   {id:77,name:"衢州市第二人民医院",city:"衢州",level:"三乙",address:"衢州市衢江区信安大道338号",depts:["骨科","心血管内科"],pros:["衢江区龙头","新晋三乙发展快"],cons:["在市级三甲阴影下"],口碑:"近年来等级提升明显",url:"待补充",tags:["retention","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
 
-  // ======== 舟山 (3家) ========
+  // ======== 舟山 (4家) ========
   {id:78,name:"舟山医院",city:"舟山",level:"三甲",address:"舟山市定海区千岛街道定沈路739号",depts:["心血管内科","骨科","急诊科"],pros:["舟山唯一三甲","海岛急救经验独特"],cons:["海岛地理位置限制","高端病例常转送宁波"],口碑:"海岛医疗中心，急诊/海上救援有特色",url:"www.zs-hospital.com",tags:["platform","emergency","retention"],salary:"实习生无工资；留用后年薪约10-15万，海岛补贴额外"},
   {id:79,name:"舟山市普陀区人民医院",city:"舟山",level:"三乙",address:"舟山市普陀区东港街道文康街19号",depts:["心血管内科","骨科"],pros:["普陀区龙头","旅游旺季急诊多"],cons:["规模较小"],口碑:"海岛基层经验丰富",url:"待补充",tags:["emergency","retention"],salary:"实习生无工资；留用后年薪约9-12万"},
   {id:80,name:"舟山市中医院",city:"舟山",level:"三乙",address:"舟山市定海区新桥路355号",depts:["中医骨伤科","针灸推拿科"],pros:["中医骨伤有海岛特色"],cons:["规模偏小"],口碑:"舟山中医唯一选择",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-11万"},
 
-  // ======== 台州 (11家) ========
+  // ======== 台州 (14家) ========
   {id:81,name:"台州医院",city:"台州",level:"三甲",address:"台州市临海市西门街150号",depts:["急诊科","骨科","心血管内科","神经外科"],pros:["台州老牌龙头","病例丰富","恩泽集团管理"],cons:["位于临海非台州市区","多院区通勤"],口碑:"台州医疗标杆，恩泽体系管理规范",url:"www.tzhospital.com",tags:["hands-on","teaching","platform","emergency"],salary:"实习生无工资；留用后年薪约11-17万，恩泽体系待遇较好"},
   {id:82,name:"台州市中心医院",city:"台州",level:"三甲",address:"台州市椒江区东海大道999号",depts:["心血管内科","肿瘤科","神经内科"],pros:["位于台州市区","新院区环境好"],cons:["在恩泽体系下存在感偏弱"],口碑:"椒江区中心，近年发展快",url:"www.tzzxyy.com",tags:["moderate","dorm"],salary:"实习生无工资；留用后年薪约10-15万"},
   {id:83,name:"台州市中医院",city:"台州",level:"三甲",address:"台州市椒江区中山西路278号",depts:["中医内科","针灸推拿科"],pros:["中医护理上手快"],cons:["西医急诊少"],口碑:"台州中医护理首选",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
@@ -481,6 +481,69 @@ var hospitals = [
   {id:91,name:"丽水市中心医院",city:"丽水",level:"三甲",address:"丽水市莲都区括苍路289号",depts:["心血管内科","神经外科","骨科","影像科"],pros:["浙西南最大医院","病种丰富","新院区好"],cons:["山区城市交通不便","高端人才引进难"],口碑:"浙西南医疗中心，区域不可替代",url:"www.lshospital.com",tags:["platform","hands-on","teaching"],salary:"实习生无工资；留用后年薪约10-15万，丽水山区补贴"},
   {id:92,name:"丽水市人民医院",city:"丽水",level:"三甲",address:"丽水市莲都区大众街15号",depts:["心血管内科","骨科","妇产科"],pros:["老牌三甲带教有经验"],cons:["院区老旧","与中心医院竞争"],口碑:"莲都区老市民认可度高",url:"www.ls-hospital.com",tags:["teaching","retention"],salary:"实习生无工资；留用后年薪约10-14万"},
   {id:93,name:"丽水市中医院",city:"丽水",level:"三乙",address:"丽水市莲都区中山街800号",depts:["中医内科","针灸推拿科","畲医药特色"],pros:["畲族医药特色全国独有","中医护理上手快"],cons:["综合规模偏小"],口碑:"畲医药特色是亮点，适合中医方向",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约8-11万"}
+
+  // ======== 杭州 补充 (16家) ========
+  {id:94,name:"浙江大学医学院附属妇产科医院",city:"杭州",level:"三甲",address:"杭州市上城区学士路1号",depts:["妇产科(全国顶尖)","生殖医学","新生儿科"],pros:["妇产科护理全国前三","专科操作极丰富"],cons:["专科面窄","夜班强度大"],口碑:"全国妇产科护理标杆，专科实习含金量极高",url:"待补充",tags:["specialty","teaching","platform"],salary:"实习生无工资；留用后年薪约12-18万"},
+  {id:95,name:"浙江大学医学院附属儿童医院",city:"杭州",level:"三甲",address:"杭州市下城区竹竿巷57号",depts:["儿科","新生儿科","小儿外科","儿童保健"],pros:["儿科护理全国领先","儿科技能全面系统"],cons:["患儿配合度低","家长沟通压力大"],口碑:"儿科护理王牌，全国排名前三",url:"待补充",tags:["specialty","teaching","platform"],salary:"实习生无工资；留用后年薪约12-17万，儿科护理岗位较稳定"},
+  {id:96,name:"浙江省肿瘤医院",city:"杭州",level:"三甲",address:"杭州市拱墅区半山东路1号",depts:["肿瘤外科","放疗科","肿瘤内科"],pros:["肿瘤专科护理深入","科研机会多","化疗护理经验稀缺"],cons:["病种沉重心理压力大","部分科室夜班辛苦"],口碑:"肿瘤护理方向首选，省级平台值得",url:"待补充",tags:["specialty","moderate","platform"],salary:"实习生无工资；留用后年薪约11-16万"},
+  {id:97,name:"浙江省中医院",city:"杭州",level:"三甲",address:"杭州市上城区邮电路54号",depts:["中医内科","中医肿瘤科","针灸科","推拿科"],pros:["中医护理体系完整","名老中医带教"],cons:["西医急症偏少"],口碑:"浙江中医药大学附属第一医院，浙江省中医龙头",url:"待补充",tags:["specialty","teaching","moderate","less-night"],salary:"实习生无工资；留用后年薪约11-15万，中医护理岗位稳定"},
+  {id:98,name:"杭州市第七人民医院",city:"杭州",level:"三甲",address:"杭州市西湖区天目山路305号",depts:["精神科","临床心理科","睡眠障碍科"],pros:["精神专科护理深入","工作压力相对较小"],cons:["病种单一","无综合科护理经验"],口碑:"精神卫生护理方向不错，杭州地区首选",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
+  {id:99,name:"杭州市儿童医院",city:"杭州",level:"三甲",address:"杭州市下城区文晖路195号",depts:["儿科","新生儿科","小儿外科"],pros:["儿科护理经验丰富","环境新"],cons:["专科面窄","夜班有"],口碑:"儿科护理不错的三甲平台",url:"待补充",tags:["specialty","moderate"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:100,name:"杭州市妇产科医院",city:"杭州",level:"三甲",address:"杭州市上城区鲲鹏路369号",depts:["产科","妇科","生殖医学"],pros:["妇产专科护理精细","环境较好"],cons:["综合科室有限"],口碑:"妇产护理方向，杭州市妇幼保健院",url:"待补充",tags:["specialty","moderate"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:101,name:"杭州市临平区中医院",city:"杭州",level:"三乙",address:"杭州市临平区塘栖镇",depts:["中医内科","针灸推拿"],pros:["基层中医特色","上手快"],cons:["地理位置偏远"],口碑:"临平地区中医选择",url:"待补充",tags:["specialty","dorm","moderate","retention"],salary:"实习生无工资；留用后年薪约8-11万"},
+  {id:102,name:"杭州市临平区中西医结合医院",city:"杭州",level:"三乙",address:"杭州市临平区保健路",depts:["中西医结合内科","康复科"],pros:["中西医结合特色"],cons:["规模偏小"],口碑:"临平本地认可",url:"待补充",tags:["specialty","moderate","retention"],salary:"实习生无工资；留用后年薪约8-11万"},
+  {id:103,name:"杭州市临平区妇幼保健院",city:"杭州",level:"三乙",address:"杭州市临平区人民大道",depts:["妇产科","儿科"],pros:["妇儿专科上手快"],cons:["专科面窄"],口碑:"临平妇儿护理方向",url:"待补充",tags:["specialty","moderate","retention"],salary:"实习生无工资；留用后年薪约8-11万"},
+  {id:104,name:"杭州市富阳区中医院",city:"杭州",level:"三乙",address:"杭州市富阳区桂花路",depts:["中医内科","针灸推拿","骨伤科"],pros:["中医护理有机会","富阳中医氛围好"],cons:["离主城区远"],口碑:"富阳中医有地域特色",url:"待补充",tags:["specialty","moderate","retention"],salary:"实习生无工资；留用后年薪约8-11万"},
+  {id:105,name:"杭州市富阳区妇幼保健院",city:"杭州",level:"三乙",address:"杭州市富阳区横凉亭路",depts:["妇产科","儿科"],pros:["妇儿专科上手快"],cons:["偏远"],口碑:"富阳妇儿护理方向",url:"待补充",tags:["specialty","retention"],salary:"实习生无工资；留用后年薪约8-10万"},
+  {id:106,name:"杭州市临安区中医院",city:"杭州",level:"三乙",address:"杭州市临安区城中街",depts:["中医内科","针灸推拿"],pros:["基层锻炼机会多"],cons:["偏远"],口碑:"临安本地中医选择",url:"待补充",tags:["specialty","moderate","retention"],salary:"实习生无工资；留用后年薪约8-10万"},
+  {id:107,name:"桐庐县中医院",city:"杭州",level:"三乙",address:"杭州市桐庐县桐君街道",depts:["中医内科","针灸推拿"],pros:["基层锻炼全面","人情味浓"],cons:["县城偏远"],口碑:"桐庐本地首选",url:"待补充",tags:["specialty","retention","dorm"],salary:"实习生无工资；留用后年薪约7-10万"},
+  {id:108,name:"淳安县中医院",city:"杭州",level:"三乙",address:"杭州市淳安县千岛湖镇",depts:["中医内科","针灸推拿"],pros:["千岛湖环境好","有宿舍"],cons:["县城偏远"],口碑:"环境宜人节奏慢",url:"待补充",tags:["specialty","retention","dorm","less-night"],salary:"实习生无工资；留用后年薪约7-10万"},
+  {id:109,name:"浙江老年关怀医院",city:"杭州",level:"三乙",address:"杭州市拱墅区",depts:["老年病科","康复科"],pros:["老年护理特色","节奏慢"],cons:["病种单一","综合科缺乏"],口碑:"老年护理方向",url:"待补充",tags:["less-night","moderate","specialty"],salary:"实习生无工资；留用后年薪约8-10万"},
+
+  // ======== 宁波 补充 (11家) ========
+  {id:110,name:"宁波大学附属妇女儿童医院",city:"宁波",level:"三甲",address:"宁波市海曙区柳汀街339号",depts:["妇产科","儿科","新生儿科"],pros:["妇儿专科护理深入","教学规范"],cons:["专科面窄"],口碑:"宁波妇儿护理首选",url:"待补充",tags:["specialty","teaching"],salary:"实习生无工资；留用后年薪约11-16万"},
+  {id:111,name:"宁波大学附属康宁医院",city:"宁波",level:"三甲",address:"宁波市镇海区庄市街道",depts:["精神科","临床心理科"],pros:["精神专科护理深入","压力较小"],cons:["病种单一"],口碑:"宁波精神卫生龙头",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:112,name:"宁波市奉化区中医医院",city:"宁波",level:"三甲",address:"宁波市奉化区中山西路",depts:["中医内科","针灸推拿"],pros:["中医护理特色"],cons:["远离宁波市区"],口碑:"奉化地区中医首选",url:"待补充",tags:["specialty","moderate"],salary:"实习生无工资；留用后年薪约9-13万"},
+  {id:113,name:"中国人民解放军联勤保障部队第九〇六医院",city:"宁波",level:"三甲",address:"宁波市鄞州区中山东路377号",depts:["骨科","烧伤科","创伤外科"],pros:["军队医院管理规范","创伤护理经验多"],cons:["军队体系特殊管理"],口碑:"军队医院作风严谨",url:"待补充",tags:["hands-on","emergency"],salary:"实习生补贴参照军队标准；留用后年薪约10-15万"},
+  {id:114,name:"宁波市镇海区中医医院",city:"宁波",level:"三乙",address:"宁波市镇海区招宝山街道",depts:["中医内科","针灸推拿"],pros:["基层中医特色"],cons:["规模小"],口碑:"镇海本地中医选择",url:"待补充",tags:["specialty","moderate","retention"],salary:"实习生无工资；留用后年薪约8-11万"},
+  {id:115,name:"宁波明州医院",city:"宁波",level:"三乙",address:"宁波市鄞州区泰安西路168号",depts:["骨科","心血管内科","妇产科"],pros:["民营环境好","服务意识强"],cons:["民营性质稳定性不如公立"],口碑:"民营综合医院，服务理念OK",url:"待补充",tags:["moderate"],salary:"实习生可能有补贴(500-800元/月)；留用后年薪约8-13万"},
+  {id:116,name:"余姚市中医医院",city:"宁波",level:"三乙",address:"宁波市余姚市阳明东路",depts:["中医内科","针灸推拿"],pros:["中医护理上手快"],cons:["县级市偏远"],口碑:"余姚中医方向选择",url:"待补充",tags:["specialty","retention"],salary:"实习生无工资；留用后年薪约8-10万"},
+  {id:117,name:"余姚市妇幼保健院",city:"宁波",level:"三乙",address:"宁波市余姚市世南西路",depts:["妇产科","儿科"],pros:["妇儿专科","有宿舍"],cons:["偏远"],口碑:"余姚妇儿护理",url:"待补充",tags:["specialty","retention","dorm"],salary:"实习生无工资；留用后年薪约8-10万"},
+  {id:118,name:"慈溪市妇幼保健院",city:"宁波",level:"三乙",address:"宁波市慈溪市三北大街",depts:["妇产科","儿科"],pros:["慈溪经济好","妇儿专科"],cons:["偏远"],口碑:"慈溪妇儿护理",url:"待补充",tags:["specialty","retention"],salary:"实习生无工资；留用后年薪约9-12万"},
+  {id:119,name:"宁海县第一医院",city:"宁波",level:"三乙",address:"宁波市宁海县桃源中路",depts:["心血管内科","骨科"],pros:["基层操作多","上手快"],cons:["县城偏远"],口碑:"宁海本地首选",url:"待补充",tags:["hands-on","retention","dorm"],salary:"实习生无工资；留用后年薪约8-10万"},
+  {id:120,name:"宁海县妇幼保健院",city:"宁波",level:"三乙",address:"宁波市宁海县兴海中路",depts:["妇产科","儿科"],pros:["妇儿专科上手快"],cons:["偏远"],口碑:"宁海妇儿护理",url:"待补充",tags:["specialty","retention"],salary:"实习生无工资；留用后年薪约8-10万"},
+
+  // ======== 温州 补充 (8家) ========
+  {id:121,name:"温州医科大学附属眼视光医院",city:"温州",level:"三甲",address:"温州市鹿城区学院西路270号",depts:["眼科(全国前三)","视光科"],pros:["眼科护理全国顶尖","环境好","门诊为主"],cons:["专科极窄","名额极少"],口碑:"眼科护理全国标杆",url:"待补充",tags:["specialty","less-night","platform"],salary:"实习生无工资；留用后年薪约11-17万"},
+  {id:122,name:"温州市中西医结合医院",city:"温州",level:"三甲",address:"温州市鹿城区锦绣路75号",depts:["中西医结合内科","骨科","妇产科"],pros:["中西医结合特色","综合科室全"],cons:["省级医院光环下"],口碑:"中西医结合护理有特色",url:"待补充",tags:["specialty","teaching"],salary:"实习生无工资；留用后年薪约10-15万"},
+  {id:123,name:"温州市第七人民医院",city:"温州",level:"三甲",address:"温州市瓯海区西山东路552号",depts:["精神科","心理科"],pros:["精神专科护理深入","2023年新晋三甲"],cons:["病种单一"],口碑:"温州精神卫生中心",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
+  {id:124,name:"温州康宁医院",city:"温州",level:"三甲",address:"温州市鹿城区黄龙住宅区",depts:["精神科","临床心理科"],pros:["民营精神专科旗舰","管理先进"],cons:["民营性质"],口碑:"精神专科民营标杆，港股上市",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生补贴500-1000元/月(民营灵活)；留用后年薪约9-14万"},
+  {id:125,name:"瑞安市中医院",city:"温州",level:"三乙",address:"温州市瑞安市安阳路",depts:["中医内科","针灸推拿"],pros:["中医护理机会","瑞安经济好"],cons:["距离市区远"],口碑:"瑞安中医选择",url:"待补充",tags:["specialty","retention"],salary:"实习生无工资；留用后年薪约8-11万"},
+  {id:126,name:"永嘉县中医医院",city:"温州",level:"三乙",address:"温州市永嘉县瓯北镇",depts:["中医内科","针灸推拿"],pros:["基层中医特色"],cons:["偏远"],口碑:"永嘉中医选择",url:"待补充",tags:["specialty","retention"],salary:"实习生无工资；留用后年薪约7-10万"},
+  {id:127,name:"苍南县中医院",city:"温州",level:"三乙",address:"温州市苍南县灵溪镇",depts:["中医内科","针灸推拿"],pros:["基层锻炼全面"],cons:["偏远"],口碑:"苍南中医选择",url:"待补充",tags:["specialty","retention"],salary:"实习生无工资；留用后年薪约7-10万"},
+  {id:128,name:"平阳县中医院",city:"温州",level:"三乙",address:"温州市平阳县鳌江镇",depts:["中医内科","针灸推拿"],pros:["基层中医特色"],cons:["偏远"],口碑:"平阳中医选择",url:"待补充",tags:["specialty","retention"],salary:"实习生无工资；留用后年薪约7-10万"},
+
+  // ======== 绍兴 补充 (3家) ========
+  {id:129,name:"绍兴市妇幼保健院",city:"绍兴",level:"三甲",address:"绍兴市越城区东街305号",depts:["妇产科","儿科","生殖医学"],pros:["妇儿专科深入","三甲专科平台"],cons:["专科面窄"],口碑:"绍兴妇儿护理首选",url:"待补充",tags:["specialty","teaching"],salary:"实习生无工资；留用后年薪约10-15万"},
+  {id:130,name:"诸暨市中医医院",city:"绍兴",level:"三甲",address:"绍兴市诸暨市暨阳街道",depts:["中医内科","针灸推拿","中医骨伤"],pros:["中医护理特色","诸暨经济好"],cons:["远离绍兴市区"],口碑:"诸暨中医标杆",url:"待补充",tags:["specialty","retention"],salary:"实习生无工资；留用后年薪约9-13万"},
+  {id:131,name:"绍兴文理学院附属医院",city:"绍兴",level:"三乙",address:"绍兴市越城区城南大道",depts:["心血管内科","骨科","消化内科"],pros:["大学附属有教学资源"],cons:["存在感偏弱"],口碑:"教学型医院，师生关系不错",url:"待补充",tags:["teaching","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
+
+  // ======== 嘉兴 补充 (1家) ========
+  {id:132,name:"嘉兴市妇幼保健院",city:"嘉兴",level:"三甲",address:"嘉兴市南湖区中环东路2468号",depts:["产科","妇科","儿科"],pros:["妇儿专科深入","新院区好"],cons:["专科面窄"],口碑:"嘉兴妇儿护理首选",url:"待补充",tags:["specialty","teaching"],salary:"实习生无工资；留用后年薪约10-15万"},
+
+  // ======== 金华 补充 (1家) ========
+  {id:133,name:"金华市第二医院",city:"金华",level:"三甲",address:"金华市婺城区宾虹西路",depts:["精神科","心理科","老年精神科"],pros:["精神专科护理深入"],cons:["病种单一"],口碑:"金华精神卫生中心",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
+
+  // ======== 台州 补充 (3家) ========
+  {id:134,name:"台州市第二人民医院",city:"台州",level:"三甲",address:"台州市天台县福溪街道",depts:["精神科","心理科"],pros:["精神专科护理","2023年新晋三甲"],cons:["地理位置偏"],口碑:"台州精神卫生中心",url:"待补充",tags:["specialty","less-night"],salary:"实习生无工资；留用后年薪约8-12万"},
+  {id:135,name:"台州恩泽医疗中心路桥医院",city:"台州",level:"三乙",address:"台州市路桥区下里桥西路",depts:["心血管内科","骨科","康复科"],pros:["恩泽体系管理"],cons:["路桥非市中心"],口碑:"恩泽体系，管理规范",url:"待补充",tags:["moderate","retention"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:136,name:"台州市中西医结合医院",city:"台州",level:"三乙",address:"台州市温岭市泽国镇",depts:["中西医结合内科","骨科"],pros:["中西医结合特色"],cons:["乡镇位置偏"],口碑:"台州中西医结合方向",url:"待补充",tags:["specialty","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
+
+  // ======== 衢州 补充 (1家) ========
+  {id:137,name:"衢州市第三医院",city:"衢州",level:"三乙",address:"衢州市柯城区白云街道",depts:["精神科","心理科"],pros:["精神专科护理"],cons:["病种单一"],口碑:"衢州精神卫生方向",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约8-12万"},
+
+  // ======== 舟山 补充 (1家) ========
+  {id:138,name:"舟山市第二人民医院",city:"舟山",level:"三乙",address:"舟山市定海区白虎山路",depts:["精神科","心理科"],pros:["海岛精神卫生特色"],cons:["规模小"],口碑:"舟山精神卫生方向",url:"待补充",tags:["specialty","less-night"],salary:"实习生无工资；留用后年薪约8-11万"}
 ];
 
 var cities = ["杭州","宁波","温州","绍兴","嘉兴","湖州","金华","衢州","舟山","台州","丽水"];
