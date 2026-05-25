@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>浙江省三甲/三乙医院护理实习查询系统</title>
+<meta name="description" content="浙江省93家三级医院护理实习查询工具，覆盖全省11个城市，支持城市筛选、偏好匹配与薪资参考">
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #eff6ff;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --tag-bg: #f1f5f9;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.04);
+    --radius: 10px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #1e40af 100%);
+    color: #fff;
+    padding: 22px 24px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.5px; }
+  .header p { font-size: 0.82rem; opacity: 0.85; margin-top: 3px; }
+
+  /* Layout */
+  .container { max-width: 1200px; margin: 0 auto; padding: 16px 20px; }
+  .layout { display: grid; grid-template-columns: 300px 1fr; gap: 20px; align-items: start; }
+
+  /* Sidebar */
+  .sidebar {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 110px;
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
+    border: 1px solid var(--border);
+  }
+  .sidebar h3 { font-size: 0.92rem; margin-bottom: 10px; color: var(--text); display: flex; align-items: center; gap: 6px; }
+  .sidebar h3::before { content: ''; display: inline-block; width: 3px; height: 15px; background: var(--primary); border-radius: 2px; }
+
+  /* Search */
+  .search-box {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+    outline: none;
+    transition: border-color 0.15s;
+    font-family: inherit;
+  }
+  .search-box:focus { border-color: var(--primary); }
+
+  /* City Grid */
+  .city-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 14px; }
+  .city-btn {
+    padding: 7px 4px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.15s;
+    text-align: center;
+    white-space: nowrap;
+    color: var(--text);
+    font-family: inherit;
+  }
+  .city-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+  .city-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+
+  /* Preference */
+  .pref-group { margin-bottom: 12px; }
+  .pref-group label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .pref-options { display: flex; flex-wrap: wrap; gap: 4px; }
+  .pref-chip {
+    padding: 4px 9px;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 0.76rem;
+    transition: all 0.15s;
+    white-space: nowrap;
+    color: var(--text);
+    font-family: inherit;
+  }
+  .pref-chip:hover { border-color: #3b82f6; background: #eff6ff; }
+  .pref-chip.active { background: #dbeafe; border-color: #3b82f6; color: #1e40af; font-weight: 500; }
+
+  .btn-row { display: flex; gap: 8px; margin-top: 14px; }
+  .btn {
+    flex: 1;
+    padding: 9px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.83rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: #1d4ed8; }
+  .btn-outline { background: #fff; color: var(--text); border: 1.5px solid var(--border); }
+  .btn-outline:hover { background: var(--bg); }
+
+  /* Main content */
+  .stats-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 0.83rem;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+    gap: 8px;
+    background: var(--card-bg);
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .stats-bar strong { color: var(--primary); }
+
+  /* Tips banner */
+  .tips-banner {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    font-size: 0.82rem;
+    color: #1e40af;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .tips-banner .close-tip {
+    margin-left: auto;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    opacity: 0.5;
+    background: none;
+    border: none;
+    color: inherit;
+  }
+  .tips-banner .close-tip:hover { opacity: 1; }
+
+  /* Hospital Card */
+  .hospital-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: box-shadow 0.2s, transform 0.15s;
+    position: relative;
+  }
+  .hospital-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+  .hospital-card.recommended {
+    border-left: 4px solid var(--primary);
+    background: var(--primary-light);
+  }
+  .hospital-card.no-match { opacity: 0.6; }
+
+  .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .card-header h3 { font-size: 0.98rem; font-weight: 700; color: var(--text); }
+  .badge-row { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+  .badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .badge-sanja { background: #fef3c7; color: #92400e; }
+  .badge-sanyi { background: #e0e7ff; color: #3730a3; }
+  .badge-city { background: var(--tag-bg); color: var(--text-secondary); }
+  .badge-match { background: #dcfce7; color: #166534; font-size: 0.66rem; }
+  .badge-recommend { background: #dcfce7; color: #166534; }
+  .match-score {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    white-space: nowrap;
+    background: var(--primary-light);
+    padding: 3px 8px;
+    border-radius: 12px;
+  }
+
+  .card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 14px; margin-top: 8px; font-size: 0.8rem; }
+  .card-meta dt { color: var(--text-secondary); font-size: 0.7rem; }
+  .card-meta dd { color: var(--text); }
+
+  .card-detail { margin-top: 8px; font-size: 0.8rem; }
+  .detail-section { margin-top: 5px; }
+  .detail-section strong { font-size: 0.73rem; color: var(--primary); }
+
+  .tag-list { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; }
+  .tag { padding: 2px 7px; background: var(--tag-bg); border-radius: 4px; font-size: 0.71rem; color: var(--text-secondary); }
+
+  .salary-info {
+    margin-top: 6px;
+    padding: 7px 10px;
+    background: #fffbeb;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    color: #92400e;
+    border: 1px solid #fde68a;
+  }
+
+  /* Back to top */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+    display: none;
+    z-index: 99;
+    transition: opacity 0.2s;
+    font-family: inherit;
+  }
+  .back-to-top:hover { opacity: 0.85; }
+  .back-to-top.visible { display: block; }
+
+  /* Result count badge */
+  .result-summary {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    margin-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; max-height: none; }
+    .card-meta { grid-template-columns: 1fr; }
+    .header h1 { font-size: 1.15rem; }
+  }
+
+  /* Print styles */
+  @media print {
+    .header { position: static; background: #fff; color: #000; box-shadow: none; padding: 10px 0; }
+    .sidebar, .back-to-top, .btn-row, .tips-banner, .search-box { display: none !important; }
+    .layout { display: block; }
+    .hospital-card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; margin-bottom: 6px; }
+    body { background: #fff; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>浙江省三级医院护理实习查询系统</h1>
+  <p>覆盖全省11个城市 &middot; 93家三甲/三乙医院 &middot; 智能偏好推荐 &middot; 薪资参考</p>
+</div>
+
+<div class="container">
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <input type="text" class="search-box" id="searchBox" placeholder="搜索医院名称..." oninput="applyFilter()">
+
+      <h3>选择城市</h3>
+      <div class="city-grid" id="cityGrid"></div>
+
+      <h3>我的偏好（可多选）</h3>
+      <div class="pref-group">
+        <label>操作与技能</label>
+        <div class="pref-options" data-pref="skill">
+          <span class="pref-chip" data-val="hands-on">操作机会多</span>
+          <span class="pref-chip" data-val="specialty">专科特色强</span>
+          <span class="pref-chip" data-val="emergency">急诊/ICU经验</span>
+        </div>
+      </div>
+      <div class="pref-group">
+        <label>教学与环境</label>
+        <div class="pref-options" data-pref="teaching">
+          <span class="pref-chip" data-val="teaching">带教认真负责</span>
+          <span class="pref-chip" data-val="platform">省级大平台</span>
+          <span class="pref-chip" data-val="dorm">有宿舍提供</span>
+        </div>
+      </div>
+      <div class="pref-group">
+        <label>工作节奏</label>
+        <div class="pref-options" data-pref="lifestyle">
+          <span class="pref-chip" data-val="less-night">夜班较少</span>
+          <span class="pref-chip" data-val="moderate">强度适中</span>
+          <span class="pref-chip" data-val="retention">留用机会多</span>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="applyFilter()">智能推荐</button>
+        <button class="btn btn-outline" onclick="resetAll()">重置</button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main" id="mainContent">
+      <div class="stats-bar" id="statsBar"></div>
+      <div class="tips-banner" id="tipsBanner">
+        <span>使用技巧：在左侧选择城市和偏好标签，系统会自动计算每所医院的匹配度并排序推荐。</span>
+        <button class="close-tip" onclick="dismissTip()" title="关闭提示">&times;</button>
+      </div>
+      <div id="hospitalList"></div>
+    </main>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <p>数据来源：浙江省卫健委第三/四周期医院等级评审结果 &middot; 薪资为行业估算仅供参考 &middot; 以各医院当年实际招聘公告为准</p>
+  <p style="margin-top:4px">本页面为纯静态HTML文件，所有数据内嵌，无需网络即可使用</p>
+</footer>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="返回顶部">&#8593;</button>
+
+<script>
+// ====== 医院数据（共93条） ======
+var hospitals = [
+  // ======== 杭州 (24家) ========
+  {id:1,name:"浙江大学医学院附属第一医院",city:"杭州",level:"三甲",address:"杭州市上城区庆春路79号",depts:["肝胆胰外科","感染科","血液科","器官移植","ICU"],pros:["病种丰富","操作机会中等","带教体系规范"],cons:["工作强度极大","夜班频繁","住宿紧张"],口碑:"全国顶尖教学医院，实习含金量高但压力大",url:"www.zy91.com",tags:["hands-on","teaching","platform","emergency"],salary:"实习生无工资，部分科室有夜班补贴（约30-50元/晚）；留用后年薪约12-18万（含五险一金）"},
+  {id:2,name:"浙江大学医学院附属第二医院",city:"杭州",level:"三甲",address:"杭州市上城区解放路88号",depts:["心血管内科","神经外科","骨科","急诊医学","烧伤科"],pros:["急诊和ICU操作机会多","护理部培训系统"],cons:["人流量大","夜班强度高","无宿舍需自行租房"],口碑:"带教严谨，全国考核名列前茅，口碑极佳",url:"www.z2hospital.com",tags:["hands-on","teaching","platform","emergency"],salary:"实习生无工资，夜班补贴约40-60元/晚；留用后年薪约14-20万，浙大体系福利好"},
+  {id:3,name:"浙江大学医学院附属邵逸夫医院",city:"杭州",level:"三甲",address:"杭州市上城区庆春东路3号",depts:["微创外科","肿瘤内科","妇产科","消化内科"],pros:["管理先进(中美合作)","人文关怀好","护理理念国际化"],cons:["实习生竞争激烈","留用门槛高"],口碑:"护理管理全国标杆，对实习生尊重度高",url:"www.srrsh.com",tags:["teaching","platform","specialty"],salary:"实习生无工资；留用后年薪约13-18万，中美合作背景培训资源丰富"},
+  {id:4,name:"浙江省人民医院",city:"杭州",level:"三甲",address:"杭州市下城区上塘路158号",depts:["心血管内科","神经内科","骨科","康复医学"],pros:["科室齐全","带教老师有耐心"],cons:["部分科室参与度不高","无统一宿舍"],口碑:"省级医院中规中矩，适合稳扎稳打型实习生",url:"www.hospitalstar.com",tags:["teaching","platform","moderate"],salary:"实习生无工资；留用后年薪约11-16万"},
+  {id:5,name:"浙江医院",city:"杭州",level:"三甲",address:"杭州市西湖区灵隐路12号",depts:["老年医学","心脑血管病","康复医学"],pros:["老年护理见长","工作节奏温和"],cons:["综合急症少","操作机会有限"],口碑:"偏向老年/慢病护理，适合喜欢安静节奏的实习生",url:"www.zjhospital.com.cn",tags:["less-night","moderate","specialty"],salary:"实习生无工资；留用后年薪约10-14万，老年护理方向特色补贴"},
+  {id:6,name:"杭州市第一人民医院",city:"杭州",level:"三甲",address:"杭州市上城区浣纱路261号",depts:["妇产科","消化内科","心血管内科","普外科"],pros:["市区位置便利","临床病例多"],cons:["老旧院区空间狭小","实习生辅助角色为主"],口碑:"市属龙头，实习氛围尚可，留用机会一般",url:"www.hz-hospital.com",tags:["moderate","retention"],salary:"实习生无工资；留用后年薪约10-15万，市属编制竞争适中"},
+  {id:7,name:"杭州师范大学附属医院",city:"杭州",level:"三甲",address:"杭州市拱墅区温州路126号",depts:["心血管内科","神经内科","耳鼻喉科"],pros:["带教较认真","与学校联系紧密"],cons:["综合实力在杭三甲中偏后"],口碑:"教学医院属性强，对护理实习生较为友好",url:"待补充",tags:["teaching","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
+  {id:8,name:"杭州市中医院",city:"杭州",level:"三甲",address:"杭州市西湖区体育场路453号",depts:["中医肾病","中医妇科","针灸科","推拿科"],pros:["中医护理特色强","针灸推拿可上手"],cons:["西医急症操作少","偏慢病管理"],口碑:"中医护理方向首选，带教老师耐心",url:"www.hztcm.com",tags:["specialty","teaching","less-night","moderate"],salary:"实习生无工资；留用后年薪约10-14万，中医护理岗位稳定"},
+  {id:9,name:"杭州市萧山区中医院",city:"杭州",level:"三甲",address:"杭州市萧山区育才路156号",depts:["骨伤科","针灸推拿","康复科"],pros:["骨伤护理特色明显","有宿舍提供"],cons:["地处萧山离主城区较远"],口碑:"萧山地区口碑好，留用机会较多",url:"待补充",tags:["dorm","retention","specialty"],salary:"实习生无工资，部分提供住宿；留用后年薪约10-13万"},
+  {id:10,name:"浙江中医药大学附属第三医院",city:"杭州",level:"三甲",address:"杭州市西湖区莫干山路219号",depts:["针灸科","推拿科","康复医学","中医脑病"],pros:["针灸推拿全国知名","可参与特色治疗"],cons:["综合科室规模较小"],口碑:"针灸推拿护理方向含金量高",url:"www.zjszsyy.com",tags:["specialty","teaching","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
+  {id:11,name:"杭州市红十字会医院",city:"杭州",level:"三甲",address:"杭州市拱墅区环城东路208号",depts:["中西医结合结核病科","呼吸科","消化内科"],pros:["传染病护理经验独特","带教注重中西结合"],cons:["部分科室病种偏窄"],口碑:"结核病/呼吸方向有特色优势",url:"www.hzhhyy.com",tags:["specialty","teaching"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:12,name:"浙江省立同德医院",city:"杭州",level:"三甲",address:"杭州市西湖区古翠路234号",depts:["肿瘤科","精神卫生科","肾病科","消化科"],pros:["精神卫生护理特色","科研平台多"],cons:["实习生多","个别科室带教参差不齐"],口碑:"精神科护理实习含金量高，综合科一般",url:"www.zjtongde.com",tags:["specialty","platform"],salary:"实习生无工资；留用后年薪约11-15万"},
+  {id:13,name:"浙江中医药大学附属第二医院",city:"杭州",level:"三甲",address:"杭州市拱墅区潮王路318号",depts:["风湿免疫科","中医骨伤科","呼吸内科"],pros:["风湿免疫护理有特色","教学体系规范"],cons:["规模在省三甲中偏小"],口碑:"教学型医院，师生关系较融洽",url:"www.xhhos.com",tags:["teaching","specialty","moderate"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:14,name:"杭州市富阳中医骨伤医院",city:"杭州",level:"三甲",address:"杭州市富阳区凤浦路418号",depts:["中医骨伤科","创伤骨科","康复科"],pros:["中医骨伤全国闻名","专科操作机会多"],cons:["远离杭州市中心","综合科室少"],口碑:"骨伤护理方向国家级特色，就业竞争力强",url:"待补充",tags:["hands-on","specialty"],salary:"实习生无工资；留用后年薪约9-12万"},
+  {id:15,name:"杭州市第三人民医院",city:"杭州",level:"三甲",address:"杭州市上城区西湖大道38号",depts:["皮肤科(全国知名)","肛肠科"],pros:["皮肤科护理全国稀缺经验"],cons:["综合科室有限","其他科操作机会少"],口碑:"皮肤科方向王牌，其他科室一般",url:"www.hz3yy.com",tags:["specialty","moderate","less-night"],salary:"实习生无工资；留用后年薪约10-14万，皮肤科门诊节奏较好"},
+  {id:16,name:"浙江大学医学院附属口腔医院",city:"杭州",level:"三甲",address:"杭州市上城区秋涛北路166号",depts:["口腔颌面外科","口腔种植科","正畸科"],pros:["口腔专科护理精细","环境好"],cons:["需口腔护理专业知识储备"],口碑:"口腔护理专科性强，就业方向精准",url:"www.zjkq.com.cn",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约10-15万，口腔门诊双休稳定"},
+  {id:17,name:"杭州市西溪医院",city:"杭州",level:"三甲",address:"杭州市西湖区留下镇横埠街2号",depts:["肝病/传染病","中西医结合肝病科"],pros:["传染病护理经验稀缺","防护培训规范"],cons:["病种偏窄","地理位置偏远"],口碑:"肝病/传染病方向有特色，但综合受限",url:"www.xixihospital.com",tags:["specialty","moderate"],salary:"实习生无工资；留用后年薪约10-13万，传染科补贴较高"},
+  {id:18,name:"杭州市萧山区第一人民医院",city:"杭州",level:"三乙",address:"杭州市萧山区市心南路199号",depts:["心血管内科","神经内科","骨科"],pros:["区级龙头","病人量大","操作机会多"],cons:["教学资源不及省级医院"],口碑:"基层锻炼好去处，上手快、留用机会有",url:"www.xs120.com",tags:["hands-on","retention","dorm"],salary:"实习生无工资；留用后年薪约10-14万，萧山经济好待遇可"},
+  {id:19,name:"浙江萧山医院",city:"杭州",level:"三乙",address:"杭州市萧山区育才北路728号",depts:["妇产科","儿科"],pros:["妇产/儿科操作机会多","有宿舍"],cons:["综合实力在杭州偏弱"],口碑:"妇产方向实习体验好，夜班适中",url:"www.zjxsyy.com",tags:["hands-on","dorm","specialty"],salary:"实习生无工资；留用后年薪约9-13万"},
+  {id:20,name:"杭州市余杭区第一人民医院",city:"杭州",level:"三乙",address:"杭州市余杭区临平迎宾路369号",depts:["心血管内科","骨科","急诊科"],pros:["新院区环境好","急症操作机会多"],cons:["区位偏远","带教水平参差不齐"],口碑:"近年快速发展，硬件条件不错",url:"www.yh1y.com",tags:["hands-on","emergency"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:21,name:"建德市第一人民医院",city:"杭州",level:"三乙",address:"杭州市建德市新安江街道严州大道599号",depts:["骨科","心血管内科"],pros:["基层病种多","操作上手快"],cons:["县级市远离主城","教学资源有限"],口碑:"县市级医院实习压力较小，节奏慢",url:"待补充",tags:["hands-on","less-night","moderate","dorm"],salary:"实习生无工资，部分提供住宿；留用后年薪约8-11万"},
+  {id:22,name:"杭州市临安区第一人民医院",city:"杭州",level:"三乙",address:"杭州市临安区锦城街道衣锦街548号",depts:["骨科","心血管内科","消化内科"],pros:["基层锻炼机会多","老师放手"],cons:["地理位置偏远"],口碑:"临安本地实习生较多，外地吸引力一般",url:"待补充",tags:["hands-on","moderate","retention"],salary:"实习生无工资，部分提供住宿；留用后年薪约8-11万"},
+  {id:23,name:"杭州市富阳区第一人民医院",city:"杭州",level:"三乙",address:"杭州市富阳区北环路429号",depts:["骨科","神经内科","心血管内科"],pros:["区级条件较好","骨科特色"],cons:["离杭州市区较远"],口碑:"富阳地区首选，本地实习生留用比例高",url:"待补充",tags:["retention","moderate","dorm"],salary:"实习生无工资，部分提供住宿；留用后年薪约9-12万"},
+  {id:24,name:"浙江骨伤医院",city:"杭州",level:"三乙",address:"杭州市拱墅区祥符街道莫干山路2191号",depts:["骨伤科","康复科"],pros:["骨伤专科操作多","中医正骨特色"],cons:["民营性质","综合科室缺乏"],口碑:"民营专科医院，适合定向骨伤护理",url:"待补充",tags:["hands-on","specialty"],salary:"实习生可能有一定补贴（约500-1000元/月，民营较灵活）；留用后年薪约8-12万"},
+
+  // ======== 宁波 (14家) ========
+  {id:25,name:"宁波市医疗中心李惠利医院",city:"宁波",level:"三甲",address:"宁波市鄞州区兴宁路57号",depts:["心血管内科","心胸外科","肝胆胰外科"],pros:["设备先进","手术室实习含金量高"],cons:["节奏快","夜班强度大"],口碑:"宁波综合实力最强之一，实习认可度高",url:"www.nblhl.com",tags:["hands-on","teaching","platform","emergency"],salary:"实习生无工资；留用后年薪约12-17万，宁波经济发达待遇好"},
+  {id:26,name:"宁波大学附属第一医院",city:"宁波",level:"三甲",address:"宁波市海曙区柳汀街59号",depts:["泌尿外科","心血管内科","神经外科"],pros:["大学附属教学规范","病例丰富"],cons:["院区老旧","空间拥挤"],口碑:"宁波老牌三甲，教学底蕴深厚",url:"www.nbdyyy.com",tags:["teaching","platform","hands-on"],salary:"实习生无工资；留用后年薪约11-16万"},
+  {id:27,name:"宁波市第二医院",city:"宁波",level:"三甲",address:"宁波市海曙区西北街41号",depts:["烧伤科","骨科","肿瘤科"],pros:["烧伤护理特色明显","有宿舍可申请"],cons:["部分科室实习生超编"],口碑:"烧伤科护理全国知名，骨科也不错",url:"www.nbdeyy.com",tags:["specialty","dorm","hands-on"],salary:"实习生无工资，可申请宿舍；留用后年薪约11-15万"},
+  {id:28,name:"宁波大学医学院附属医院",city:"宁波",level:"三甲",address:"宁波市江北区人民路247号",depts:["妇产科","骨科","消化内科"],pros:["大学附属带教认真"],cons:["相比李惠利/第一医院规模偏小"],口碑:"教学作风扎实，师生关系好",url:"待补充",tags:["teaching","moderate"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:29,name:"宁波市中医院",city:"宁波",level:"三甲",address:"宁波市海曙区丽园北路819号",depts:["中医肾病科","中医妇科","针灸科"],pros:["中医护理特色强","推拿针灸上手快"],cons:["急危重症少"],口碑:"中医护理方向在浙东首选",url:"www.nbszyy.com",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
+  {id:30,name:"宁波市第六医院",city:"宁波",level:"三甲",address:"宁波市鄞州区中山东路1059号",depts:["手外科","骨科(全国知名)"],pros:["骨科/手外护理全国顶尖","专科操作极多"],cons:["综合科室少","病种单一"],口碑:"骨科护理就业王牌，全国认可度极高",url:"www.nbdlyy.com",tags:["hands-on","specialty"],salary:"实习生无工资；留用后年薪约11-16万，骨科护理专科竞争力强"},
+  {id:31,name:"余姚市人民医院",city:"宁波",level:"三乙",address:"宁波市余姚市城东路800号",depts:["心血管内科","骨科","急诊科"],pros:["县市级龙头","操作上手快"],cons:["远离宁波市区","教学资源有限"],口碑:"余姚本地首选，留用比例高",url:"www.yyhospital.com",tags:["hands-on","retention","dorm"],salary:"实习生无工资，部分提供住宿；留用后年薪约9-13万"},
+  {id:32,name:"慈溪市人民医院",city:"宁波",level:"三乙",address:"宁波市慈溪市浒山街道南二环路999号",depts:["骨科","心血管内科","妇产科"],pros:["经济发达病人量足","动手机会多"],cons:["距离宁波主城区远"],口碑:"慈溪本地实习生多，就业留用机会好",url:"www.cxhospital.com",tags:["hands-on","retention","dorm"],salary:"实习生无工资，部分提供住宿；留用后年薪约10-14万，慈溪百强县待遇较好"},
+  {id:33,name:"象山县第一人民医院",city:"宁波",level:"三乙",address:"宁波市象山县丹东街道东谷路291号",depts:["骨科","心血管内科"],pros:["基层锻炼全面","老师愿放手"],cons:["海岛县位置偏远"],口碑:"规模偏小但人际关系融洽",url:"待补充",tags:["hands-on","moderate","less-night"],salary:"实习生无工资，部分提供住宿；留用后年薪约8-11万"},
+  {id:34,name:"宁波市鄞州人民医院",city:"宁波",level:"三乙",address:"宁波市鄞州区百丈东路251号",depts:["消化内科","神经内科","骨科"],pros:["鄞州区中心","病人量充足"],cons:["在市区三甲光环下存在感偏弱"],口碑:"区级医院中条件不错",url:"www.yzwsy.com",tags:["moderate","retention"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:35,name:"宁波市鄞州区第二医院",city:"宁波",level:"三乙",address:"宁波市鄞州区前河北路998号",depts:["泌尿外科","肾内科"],pros:["泌尿/肾内专科特色","环境较新"],cons:["综合实力一般"],口碑:"泌尿专科护理有亮点",url:"待补充",tags:["specialty","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
+  {id:36,name:"宁波市北仑区人民医院",city:"宁波",level:"三乙",address:"宁波市北仑区庐山东路1288号",depts:["骨科","普外科","心血管内科"],pros:["港口工业区外伤/急诊多"],cons:["离宁波市中心较远"],口碑:"急诊/创伤护理经验丰富",url:"待补充",tags:["hands-on","emergency"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:37,name:"宁波市康复医院",city:"宁波",level:"三乙",address:"宁波市鄞州区桑田路502号",depts:["康复医学","神经康复","骨伤康复"],pros:["康复护理上手快","治疗师配合好"],cons:["无急症经验积累"],口碑:"康复护理方向性价比较高",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-12万，康复科加班少"},
+  {id:38,name:"宁波市眼科医院",city:"宁波",level:"三乙",address:"宁波市鄞州区民安路855号",depts:["眼科","白内障","屈光手术"],pros:["眼科护理精细","环境好"],cons:["专科面窄"],口碑:"眼科护理就业方向明确",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-12万，眼科门诊双休"},
+
+  // ======== 温州 (10家) ========
+  {id:39,name:"温州医科大学附属第一医院",city:"温州",level:"三甲",address:"温州市瓯海区南白象上蔡村",depts:["急诊医学","心血管内科","神经外科","呼吸内科"],pros:["浙南闽北最大","病种极丰富","ICU/急诊操作机会多"],cons:["病人量巨大","夜班频繁"],口碑:"浙南医学殿堂，实习含金量极高",url:"www.wzhospital.cn",tags:["hands-on","platform","teaching","emergency"],salary:"实习生无工资；留用后年薪约12-18万，浙南龙头福利体系完善"},
+  {id:40,name:"温州医科大学附属第二医院",city:"温州",level:"三甲",address:"温州市鹿城区学院西路109号",depts:["儿科","骨科","妇产科","麻醉科"],pros:["儿科护理全国领先","带教体系完善"],cons:["多院区奔波","工作强度大"],口碑:"儿科方向全国标杆，护理实习首选",url:"www.wzhealth.com",tags:["hands-on","teaching","platform","specialty"],salary:"实习生无工资；留用后年薪约11-17万，儿科护理岗位较多"},
+  {id:41,name:"温州市中心医院",city:"温州",level:"三甲",address:"温州市鹿城区百里东路252号",depts:["肿瘤科","心血管内科","神经内科"],pros:["老牌市属三甲","本地认可度高"],cons:["省级医院光环下资源倾斜少"],口碑:"市属龙头，中规中矩但有留用机会",url:"www.wzhosp.com",tags:["retention","moderate"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:42,name:"温州市人民医院",city:"温州",level:"三甲",address:"温州市鹿城区仓后街57号",depts:["妇产科","消化内科","心血管内科"],pros:["妇产科特色强","市区位置便利"],cons:["院区老旧","宿舍条件一般"],口碑:"妇产科实习体验好，适合该方向",url:"www.wzsrmyy.com",tags:["specialty","dorm"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:43,name:"温州市中医院",city:"温州",level:"三甲",address:"温州市鹿城区六虹桥蛟尾路9号",depts:["中医肾病科","中医妇科","针灸推拿科"],pros:["中医护理特色","针灸推拿上手机会多"],cons:["西医急症偏少"],口碑:"浙南中医护理首选",url:"www.wzszyy.com",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
+  {id:44,name:"温州医科大学附属口腔医院",city:"温州",level:"三甲",address:"温州市鹿城区学院西路373号",depts:["口腔种植","正畸","颌面外科"],pros:["口腔专科护理规范"],cons:["招生规模小","名额少"],口碑:"口腔护理方向精品教学",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约10-15万，口腔门诊双休"},
+  {id:45,name:"瑞安市人民医院",city:"温州",level:"三乙",address:"温州市瑞安市万松路108号",depts:["心血管内科","骨科","神经内科"],pros:["全国最强县医院之一","病例多","操作多"],cons:["距离温州市区远"],口碑:"全国最强县级医院之一，实习性价比高",url:"www.rahos.gov.cn",tags:["hands-on","retention"],salary:"实习生无工资；留用后年薪约10-14万，百强县待遇好"},
+  {id:46,name:"乐清市人民医院",city:"温州",level:"三乙",address:"温州市乐清市清远路338号",depts:["心血管内科","骨科","妇产科"],pros:["经济发达病人量足"],cons:["离温州市区远"],口碑:"乐清本地认可度高，留用有优势",url:"待补充",tags:["hands-on","retention"],salary:"实习生无工资；留用后年薪约9-13万"},
+  {id:47,name:"平阳县人民医院",city:"温州",level:"三乙",address:"温州市平阳县昆阳镇雅河路112号",depts:["骨科","心血管内科"],pros:["基层锻炼全面"],cons:["县域经济偏弱","待遇一般"],口碑:"本县生源为主，外地吸引力有限",url:"待补充",tags:["hands-on","moderate","retention"],salary:"实习生无工资；留用后年薪约8-10万"},
+  {id:48,name:"苍南县人民医院",city:"温州",level:"三乙",address:"温州市苍南县灵溪镇玉苍路2288号",depts:["骨科","心血管内科","急诊科"],pros:["新院区硬件好","操作机会多"],cons:["浙江最南端较偏远"],口碑:"近年快速发展，硬件升级明显",url:"待补充",tags:["hands-on","retention","dorm"],salary:"实习生无工资，新院区可能有宿舍；留用后年薪约8-11万"},
+
+  // ======== 绍兴 (8家) ========
+  {id:49,name:"绍兴市人民医院",city:"绍兴",level:"三甲",address:"绍兴市越城区中兴北路568号",depts:["心血管内科","神经外科","骨科","消化内科"],pros:["绍兴综合最强","病例丰富","教学规范"],cons:["省级龙头近杭州有虹吸效应"],口碑:"绍兴地区首选，综合实力过硬",url:"www.sxhospital.com",tags:["hands-on","teaching","platform"],salary:"实习生无工资；留用后年薪约11-16万"},
+  {id:50,name:"诸暨市人民医院",city:"绍兴",level:"三甲",address:"绍兴市诸暨市暨阳街道浣纱南路122号",depts:["骨科","心血管内科","神经内科"],pros:["县级医院实力突出","2022年新晋三甲"],cons:["诸暨离绍兴市区较远"],口碑:"县级医院标杆，近年进步显著",url:"www.zjsrmyy.com",tags:["hands-on","retention"],salary:"实习生无工资；留用后年薪约10-14万，诸暨经济好待遇不错"},
+  {id:51,name:"绍兴市中医院",city:"绍兴",level:"三甲",address:"绍兴市越城区人民中路641号",depts:["中医骨伤科","针灸推拿科"],pros:["中医骨伤特色","推拿上手快"],cons:["西医综合偏弱"],口碑:"中医骨伤方向有地域特色",url:"www.sxzyyy.com",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
+  {id:52,name:"绍兴市第七人民医院",city:"绍兴",level:"三甲",address:"绍兴市越城区胜利西路1234号",depts:["精神卫生科","临床心理科"],pros:["精神专科护理深入"],cons:["病种单一","无综合科经验"],口碑:"精神科方向在绍兴首选",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
+  {id:53,name:"绍兴第二医院",city:"绍兴",level:"三乙",address:"绍兴市越城区延安路123号",depts:["心血管内科","骨科","呼吸内科"],pros:["百年老院文化底蕴","带教有经验"],cons:["市区三甲旁存在感偏弱"],口碑:"老绍兴人认可度高",url:"待补充",tags:["moderate","teaching"],salary:"实习生无工资；留用后年薪约10-13万"},
+  {id:54,name:"绍兴市中心医院",city:"绍兴",level:"三乙",address:"绍兴市柯桥区华宇路666号",depts:["骨科","心血管内科","肿瘤科"],pros:["柯桥区龙头","新院区条件好"],cons:["教学体系不如市人民医院"],口碑:"柯桥经济强区，本地就业有优势",url:"待补充",tags:["retention","dorm"],salary:"实习生无工资；留用后年薪约10-14万，柯桥经济强待遇好"},
+  {id:55,name:"绍兴市上虞人民医院",city:"绍兴",level:"三乙",address:"绍兴市上虞区百官街道市民大道517号",depts:["心血管内科","骨科","妇产科"],pros:["上虞区龙头","硬件不错"],cons:["距离越城区较远"],口碑:"上虞本地首选，发展稳定",url:"待补充",tags:["retention","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
+  {id:56,name:"嵊州市人民医院",city:"绍兴",level:"三乙",address:"绍兴市嵊州市三江街道丹桂路666号",depts:["心血管内科","骨科"],pros:["基层操作机会多"],cons:["县级市偏远"],口碑:"本地生源为主",url:"待补充",tags:["hands-on","retention","dorm"],salary:"实习生无工资；留用后年薪约8-11万"},
+
+  // ======== 嘉兴 (7家) ========
+  {id:57,name:"嘉兴市第一医院",city:"嘉兴",level:"三甲",address:"嘉兴市南湖区中环南路1882号",depts:["心血管内科","呼吸内科","肿瘤科","骨科"],pros:["嘉兴综合最强","新院区环境好"],cons:["靠近沪杭人才虹吸"],口碑:"嘉兴地区标杆，近年快速发展",url:"www.jxdyyy.com",tags:["platform","hands-on","teaching"],salary:"实习生无工资；留用后年薪约11-16万"},
+  {id:58,name:"嘉兴市第二医院",city:"嘉兴",level:"三甲",address:"嘉兴市南湖区环城北路1518号",depts:["神经内科","骨科","康复医学科"],pros:["康复医学有特色","教学规范"],cons:["规模在省内三甲中偏小"],口碑:"康复护理方向在浙北有口碑",url:"www.jxdeyy.com",tags:["specialty","teaching","moderate"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:59,name:"嘉兴市中医院",city:"嘉兴",level:"三甲",address:"嘉兴市南湖区中山东路1501号",depts:["中医内科","中医妇科","针灸推拿科"],pros:["中医护理上手快","有宿舍"],cons:["急危重症少"],口碑:"嘉兴中医护理首选",url:"www.jxzyy.cn",tags:["specialty","dorm","less-night","moderate"],salary:"实习生无工资，可能有宿舍；留用后年薪约10-13万"},
+  {id:60,name:"桐乡市第一人民医院",city:"嘉兴",level:"三乙",address:"嘉兴市桐乡市振东新区校场东路1918号",depts:["心血管内科","骨科","妇产科"],pros:["经济强县病人量足","硬件好"],cons:["离嘉兴市区较远"],口碑:"桐乡本地认可度高，待遇在县域中不错",url:"待补充",tags:["hands-on","retention","dorm"],salary:"实习生无工资；留用后年薪约9-13万，桐乡经济好"},
+  {id:61,name:"海宁市人民医院",city:"嘉兴",level:"三乙",address:"嘉兴市海宁市钱江西路2号",depts:["心血管内科","骨科","呼吸内科"],pros:["经济发达","硬件条件好"],cons:["靠近杭州病人外流"],口碑:"海宁本地生源为主",url:"待补充",tags:["retention","moderate"],salary:"实习生无工资；留用后年薪约9-13万，海宁经济强"},
+  {id:62,name:"嘉善县第一人民医院",city:"嘉兴",level:"三乙",address:"嘉兴市嘉善县罗星街道体育南路1218号",depts:["心血管内科","骨科"],pros:["长三角一体化前沿","发展潜力大"],cons:["与沪杭差距明显"],口碑:"长三角示范区定位，未来可期",url:"待补充",tags:["retention","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
+  {id:63,name:"浙江省荣军医院",city:"嘉兴",level:"三乙",address:"嘉兴市南湖区双园路309号",depts:["康复医学","骨科","老年病科"],pros:["退役军人优抚氛围好","康复护理特色"],cons:["综合规模偏小"],口碑:"康复/老年护理有特色，压力适中",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-12万，优抚医院稳定"},
+
+  // ======== 湖州 (4家) ========
+  {id:64,name:"湖州市中心医院",city:"湖州",level:"三甲",address:"湖州市吴兴区红旗路198号",depts:["心血管内科","神经外科","骨科","消化内科"],pros:["湖州综合最强","病种丰富","2020新晋三甲"],cons:["省级资源偏少"],口碑:"湖州龙头，近年进步明显",url:"www.hzhospital.com",tags:["platform","hands-on"],salary:"实习生无工资；留用后年薪约11-15万"},
+  {id:65,name:"湖州市第一人民医院",city:"湖州",level:"三甲",address:"湖州市吴兴区广场后路158号",depts:["心血管内科","泌尿外科","肿瘤科"],pros:["大学附属教学规范","带教认真"],cons:["院区偏老旧"],口碑:"湖州老牌医院，教学作风扎实",url:"www.hz1y.com",tags:["teaching","moderate"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:66,name:"湖州市第三人民医院",city:"湖州",level:"三甲",address:"湖州市吴兴区苕溪东路2088号",depts:["精神卫生科","心理科","老年精神科"],pros:["精神专科护理深入","省内知名"],cons:["病种单一"],口碑:"浙北精神卫生中心，专科护理有保障",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
+  {id:67,name:"长兴县人民医院",city:"湖州",level:"三乙",address:"湖州市长兴县太湖中路66号",depts:["心血管内科","骨科","呼吸内科"],pros:["长兴经济好","硬件新","与浙二合作"],cons:["县级医院平台有限"],口碑:"县域中条件较好，有浙二帮扶背景",url:"待补充",tags:["retention","dorm","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
+
+  // ======== 金华 (6家) ========
+  {id:68,name:"金华市中心医院",city:"金华",level:"三甲",address:"金华市婺城区人民东路365号",depts:["心血管内科","骨科","神经外科","急诊科"],pros:["金华综合最强","病例量大","教学体系完善"],cons:["浙中资源有限高端病例外流"],口碑:"浙中医学中心，金华地区首选",url:"www.jhzxyy.com",tags:["hands-on","teaching","platform","emergency"],salary:"实习生无工资；留用后年薪约11-16万"},
+  {id:69,name:"东阳市人民医院",city:"金华",level:"三甲",address:"金华市东阳市吴宁西路60号",depts:["骨科","心血管内科","神经内科"],pros:["全国县级标杆","管理先进"],cons:["东阳非地级市中心"],口碑:"全国县级医院典范，管理理念值得学习",url:"www.dyhospital.com",tags:["teaching","moderate","retention"],salary:"实习生无工资；留用后年薪约10-14万，医院管理好"},
+  {id:70,name:"义乌市中心医院",city:"金华",level:"三甲",address:"金华市义乌市江东路699号",depts:["心血管内科","骨科","急诊科"],pros:["义乌经济强病人足量","2023新晋三甲"],cons:["与浙四竞争患者"],口碑:"近年快速崛起，发展势头好",url:"www.ywzxyy.com",tags:["hands-on","retention"],salary:"实习生无工资；留用后年薪约11-16万，义乌经济强待遇好"},
+  {id:71,name:"金华市中医院",city:"金华",level:"三甲",address:"金华市婺城区双溪西路439号",depts:["中医内科","针灸推拿科","中医骨伤科"],pros:["中医护理特色","学生上手多"],cons:["西医综合偏弱"],口碑:"浙中中医护理首选",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
+  {id:72,name:"金华市人民医院",city:"金华",level:"三乙",address:"金华市婺城区新华街228号",depts:["妇产科","心血管内科","骨科"],pros:["妇产科特色","市区地理位置好"],cons:["为中心医院辐射下存在感偏弱"],口碑:"妇产科护理在当地有口碑",url:"www.jhhospital.com",tags:["specialty","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
+  {id:73,name:"永康市第一人民医院",city:"金华",level:"三乙",address:"金华市永康市金山西路599号",depts:["骨科","心血管内科"],pros:["百强县经济好","硬件新"],cons:["离金华市区远"],口碑:"永康本地认可度高，就业留用稳定",url:"待补充",tags:["retention","dorm"],salary:"实习生无工资；留用后年薪约9-13万"},
+
+  // ======== 衢州 (4家) ========
+  {id:74,name:"衢州市人民医院",city:"衢州",level:"三甲",address:"衢州市柯城区闽江大道100号",depts:["心血管内科","神经外科","骨科"],pros:["衢州唯一综合三甲","病种集中","新院区硬件好"],cons:["浙西经济偏弱","高端人才引进难"],口碑:"衢州龙头，在当地无可替代",url:"www.qzhospital.com",tags:["platform","hands-on","retention"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:75,name:"衢州市中医医院",city:"衢州",level:"三甲",address:"衢州市柯城区衢化路117号",depts:["中医内科","针灸推拿","中医肾病科"],pros:["中医护理有特色"],cons:["规模在省内三甲中偏小"],口碑:"浙西中医首选",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
+  {id:76,name:"浙江衢化医院",city:"衢州",level:"三乙",address:"衢州市柯城区衢化街道文昌路62号",depts:["烧伤科","职业病科"],pros:["烧伤/职业病护理特色明显"],cons:["原企业医院转型","综合实力有限"],口碑:"烧伤护理方向有独特优势",url:"待补充",tags:["specialty","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
+  {id:77,name:"衢州市第二人民医院",city:"衢州",level:"三乙",address:"衢州市衢江区信安大道338号",depts:["骨科","心血管内科"],pros:["衢江区龙头","新晋三乙发展快"],cons:["在市级三甲阴影下"],口碑:"近年来等级提升明显",url:"待补充",tags:["retention","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
+
+  // ======== 舟山 (3家) ========
+  {id:78,name:"舟山医院",city:"舟山",level:"三甲",address:"舟山市定海区千岛街道定沈路739号",depts:["心血管内科","骨科","急诊科"],pros:["舟山唯一三甲","海岛急救经验独特"],cons:["海岛地理位置限制","高端病例常转送宁波"],口碑:"海岛医疗中心，急诊/海上救援有特色",url:"www.zs-hospital.com",tags:["platform","emergency","retention"],salary:"实习生无工资；留用后年薪约10-15万，海岛补贴额外"},
+  {id:79,name:"舟山市普陀区人民医院",city:"舟山",level:"三乙",address:"舟山市普陀区东港街道文康街19号",depts:["心血管内科","骨科"],pros:["普陀区龙头","旅游旺季急诊多"],cons:["规模较小"],口碑:"海岛基层经验丰富",url:"待补充",tags:["emergency","retention"],salary:"实习生无工资；留用后年薪约9-12万"},
+  {id:80,name:"舟山市中医院",city:"舟山",level:"三乙",address:"舟山市定海区新桥路355号",depts:["中医骨伤科","针灸推拿科"],pros:["中医骨伤有海岛特色"],cons:["规模偏小"],口碑:"舟山中医唯一选择",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-11万"},
+
+  // ======== 台州 (11家) ========
+  {id:81,name:"台州医院",city:"台州",level:"三甲",address:"台州市临海市西门街150号",depts:["急诊科","骨科","心血管内科","神经外科"],pros:["台州老牌龙头","病例丰富","恩泽集团管理"],cons:["位于临海非台州市区","多院区通勤"],口碑:"台州医疗标杆，恩泽体系管理规范",url:"www.tzhospital.com",tags:["hands-on","teaching","platform","emergency"],salary:"实习生无工资；留用后年薪约11-17万，恩泽体系待遇较好"},
+  {id:82,name:"台州市中心医院",city:"台州",level:"三甲",address:"台州市椒江区东海大道999号",depts:["心血管内科","肿瘤科","神经内科"],pros:["位于台州市区","新院区环境好"],cons:["在恩泽体系下存在感偏弱"],口碑:"椒江区中心，近年发展快",url:"www.tzzxyy.com",tags:["moderate","dorm"],salary:"实习生无工资；留用后年薪约10-15万"},
+  {id:83,name:"台州市中医院",city:"台州",level:"三甲",address:"台州市椒江区中山西路278号",depts:["中医内科","针灸推拿科"],pros:["中医护理上手快"],cons:["西医急诊少"],口碑:"台州中医护理首选",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
+  {id:84,name:"台州市立医院",city:"台州",level:"三乙",address:"台州市椒江区中山东路381号",depts:["心血管内科","骨科","妇产科"],pros:["椒江老牌医院本地认可"],cons:["周边三甲多竞争大"],口碑:"椒江老市民认可度高",url:"待补充",tags:["retention","moderate"],salary:"实习生无工资；留用后年薪约10-13万"},
+  {id:85,name:"台州市第一人民医院",city:"台州",level:"三乙",address:"台州市黄岩区横街路218号",depts:["心血管内科","骨科","妇产科"],pros:["黄岩区龙头","操作机会多"],cons:["非台州市中心"],口碑:"黄岩地区首选",url:"待补充",tags:["hands-on","retention"],salary:"实习生无工资；留用后年薪约10-13万"},
+  {id:86,name:"温岭市第一人民医院",city:"台州",level:"三乙",address:"台州市温岭市城西街道川安南路333号",depts:["骨科","心血管内科","呼吸内科"],pros:["百强县病人量极大","硬件好"],cons:["离台州市区远"],口碑:"全国最强县级医院之一，实力雄厚",url:"www.wlyy.cn",tags:["hands-on","retention","dorm"],salary:"实习生无工资；留用后年薪约10-15万，温岭民营经济强待遇好"},
+  {id:87,name:"天台县人民医院",city:"台州",level:"三乙",address:"台州市天台县赤城街道劳动路335号",depts:["心血管内科","骨科"],pros:["基层病种多","老师肯教"],cons:["山区县交通不便"],口碑:"天台本地为主，人情味浓",url:"待补充",tags:["hands-on","moderate","retention"],salary:"实习生无工资；留用后年薪约8-11万"},
+  {id:88,name:"玉环市人民医院",city:"台州",level:"三乙",address:"台州市玉环市玉城街道长乐路18号",depts:["心血管内科","骨科"],pros:["海岛县急救经验独特"],cons:["海岛交通不便"],口碑:"海岛医疗特色",url:"待补充",tags:["emergency","retention"],salary:"实习生无工资；留用后年薪约8-11万"},
+  {id:89,name:"三门县人民医院",city:"台州",level:"三乙",address:"台州市三门县海游街道人民路171号",depts:["心血管内科","骨科"],pros:["基层锻炼全面"],cons:["县域经济偏弱"],口碑:"本县生源为主",url:"待补充",tags:["hands-on","retention","dorm"],salary:"实习生无工资；留用后年薪约7-10万"},
+  {id:90,name:"温岭市中医院",city:"台州",level:"三乙",address:"台州市温岭市太平街道鸣远路21号",depts:["中医内科","针灸推拿科"],pros:["中医护理特色","温岭经济好待遇可"],cons:["综合规模有限"],口碑:"台州中医护理不错选择",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约9-12万"},
+
+  // ======== 丽水 (3家) ========
+  {id:91,name:"丽水市中心医院",city:"丽水",level:"三甲",address:"丽水市莲都区括苍路289号",depts:["心血管内科","神经外科","骨科","影像科"],pros:["浙西南最大医院","病种丰富","新院区好"],cons:["山区城市交通不便","高端人才引进难"],口碑:"浙西南医疗中心，区域不可替代",url:"www.lshospital.com",tags:["platform","hands-on","teaching"],salary:"实习生无工资；留用后年薪约10-15万，丽水山区补贴"},
+  {id:92,name:"丽水市人民医院",city:"丽水",level:"三甲",address:"丽水市莲都区大众街15号",depts:["心血管内科","骨科","妇产科"],pros:["老牌三甲带教有经验"],cons:["院区老旧","与中心医院竞争"],口碑:"莲都区老市民认可度高",url:"www.ls-hospital.com",tags:["teaching","retention"],salary:"实习生无工资；留用后年薪约10-14万"},
+  {id:93,name:"丽水市中医院",city:"丽水",level:"三乙",address:"丽水市莲都区中山街800号",depts:["中医内科","针灸推拿科","畲医药特色"],pros:["畲族医药特色全国独有","中医护理上手快"],cons:["综合规模偏小"],口碑:"畲医药特色是亮点，适合中医方向",url:"待补充",tags:["specialty","less-night","moderate"],salary:"实习生无工资；留用后年薪约8-11万"}
+];
+
+var cities = ["杭州","宁波","温州","绍兴","嘉兴","湖州","金华","衢州","舟山","台州","丽水"];
+
+var prefTagMap = {
+  "hands-on": "操作机会多",
+  "specialty": "专科特色强",
+  "emergency": "急诊/ICU经验",
+  "teaching": "带教认真负责",
+  "platform": "省级大平台",
+  "dorm": "有宿舍提供",
+  "less-night": "夜班较少",
+  "moderate": "强度适中",
+  "retention": "留用机会多"
+};
+
+var activeCity = null;
+var activePrefs = new Set();
+
+// ====== 城市按钮初始化 ======
+function initCityGrid() {
+  var grid = document.getElementById('cityGrid');
+  var html = '';
+  for (var i = 0; i < cities.length; i++) {
+    html += '<button class="city-btn" data-city="' + cities[i] + '" onclick="toggleCity(\'' + cities[i] + '\')">' + cities[i] + '</button>';
+  }
+  grid.innerHTML = html;
+}
+
+// ====== 切换城市 ======
+function toggleCity(city) {
+  activeCity = activeCity === city ? null : city;
+  var btns = document.querySelectorAll('.city-btn');
+  for (var i = 0; i < btns.length; i++) {
+    var b = btns[i];
+    if (b.getAttribute('data-city') === activeCity) {
+      b.classList.add('active');
+    } else {
+      b.classList.remove('active');
+    }
+  }
+  applyFilter();
+}
+
+// ====== 偏好点击 ======
+(function bindPrefChips() {
+  var chips = document.querySelectorAll('.pref-chip');
+  for (var i = 0; i < chips.length; i++) {
+    chips[i].addEventListener('click', function() {
+      var val = this.getAttribute('data-val');
+      if (activePrefs.has(val)) {
+        activePrefs.delete(val);
+        this.classList.remove('active');
+      } else {
+        activePrefs.add(val);
+        this.classList.add('active');
+      }
+      applyFilter();
+    });
+  }
+})();
+
+// ====== 计算匹配分数 ======
+function computeScore(hospital, prefs) {
+  if (prefs.size === 0) return 0;
+  var score = 0;
+  var maxScore = prefs.size;
+  prefs.forEach(function(pref) {
+    if (hospital.tags.indexOf(pref) !== -1) score++;
+  });
+  return Math.round((score / maxScore) * 100);
+}
+
+// ====== 筛选与推荐 ======
+function applyFilter() {
+  var searchTerm = document.getElementById('searchBox').value.trim().toLowerCase();
+  var filtered = hospitals.slice();
+
+  // 搜索过滤
+  if (searchTerm) {
+    filtered = filtered.filter(function(h) {
+      return h.name.toLowerCase().indexOf(searchTerm) !== -1 ||
+             h.city.toLowerCase().indexOf(searchTerm) !== -1 ||
+             h.depts.some(function(d) { return d.toLowerCase().indexOf(searchTerm) !== -1; }) ||
+             h.address.toLowerCase().indexOf(searchTerm) !== -1;
+    });
+  }
+
+  // 城市筛选
+  if (activeCity) {
+    filtered = filtered.filter(function(h) { return h.city === activeCity; });
+  }
+
+  // 偏好匹配
+  var hasPrefs = activePrefs.size > 0;
+  for (var i = 0; i < filtered.length; i++) {
+    filtered[i]._score = hasPrefs ? computeScore(filtered[i], activePrefs) : 0;
+  }
+
+  if (hasPrefs) {
+    filtered.sort(function(a, b) { return b._score - a._score; });
+  } else {
+    filtered.sort(function(a, b) {
+      if (a.level === b.level) return a.id - b.id;
+      return a.level === '三甲' ? -1 : 1;
+    });
+  }
+
+  renderResults(filtered, hasPrefs);
+}
+
+// ====== 渲染结果 ======
+function renderResults(hospitals, hasPrefs) {
+  var statsBar = document.getElementById('statsBar');
+  var list = document.getElementById('hospitalList');
+  var cityLabel = activeCity || '浙江省';
+  var sanjiaCount = 0, sanyiCount = 0;
+  for (var i = 0; i < hospitals.length; i++) {
+    if (hospitals[i].level === '三甲') sanjiaCount++;
+    else sanyiCount++;
+  }
+
+  statsBar.innerHTML = '<span><strong>' + cityLabel + '</strong> 共 <strong>' + hospitals.length + '</strong> 家医院' +
+    (hasPrefs ? '（按偏好匹配度排序）' : '（三甲优先排列）') +
+    '</span><span style="font-size:0.78rem">三甲 ' + sanjiaCount + ' 家 &middot; 三乙 ' + sanyiCount + ' 家</span>';
+
+  if (hospitals.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:60px 20px;color:#94a3b8;font-size:0.9rem;">未找到匹配的医院，请调整筛选条件</div>';
+    return;
+  }
+
+  var html = '';
+  for (var i = 0; i < hospitals.length; i++) {
+    var h = hospitals[i];
+    var isRecommended = hasPrefs && h._score >= 50 && i < 5;
+    var scoreHTML = hasPrefs ? '<span class="match-score">匹配度 ' + h._score + '%</span>' : '';
+
+    var matchedTags = '';
+    if (hasPrefs) {
+      var matched = [];
+      for (var t = 0; t < h.tags.length; t++) {
+        if (activePrefs.has(h.tags[t])) {
+          matched.push('<span class="badge badge-match">' + prefTagMap[h.tags[t]] + '</span>');
+        }
+      }
+      matchedTags = matched.join(' ');
+    }
+
+    var deptTags = '';
+    for (var d = 0; d < h.depts.length; d++) {
+      deptTags += '<span class="tag">' + h.depts[d] + '</span>';
+    }
+
+    var recommendBadge = isRecommended ? '<span class="badge badge-recommend">推荐</span>' : '';
+    var cardClass = 'hospital-card';
+    if (isRecommended) cardClass += ' recommended';
+
+    html +=
+    '<div class="' + cardClass + '">' +
+      '<div class="card-header">' +
+        '<div style="flex:1;min-width:0">' +
+          '<h3>' + h.name + '</h3>' +
+          '<div class="badge-row" style="margin-top:4px">' +
+            '<span class="badge ' + (h.level === '三甲' ? 'badge-sanja' : 'badge-sanyi') + '">' + h.level + '</span>' +
+            '<span class="badge badge-city">' + h.city + '</span>' +
+            matchedTags +
+            recommendBadge +
+          '</div>' +
+        '</div>' +
+        scoreHTML +
+      '</div>' +
+      '<div class="card-meta">' +
+        '<dl><dt>地址</dt><dd>' + h.address + '</dd></dl>' +
+        '<dl><dt>官网</dt><dd>' + h.url + '</dd></dl>' +
+      '</div>' +
+      '<div class="card-detail">' +
+        '<div class="detail-section"><strong>重点科室</strong><div class="tag-list">' + deptTags + '</div></div>' +
+        '<div class="detail-section" style="margin-top:4px">' +
+          '<strong>实习生评价</strong>' +
+          '<div style="color:#166534">优点：' + h.pros.join('；') + '</div>' +
+          '<div style="color:#dc2626">不足：' + h.cons.join('；') + '</div>' +
+        '</div>' +
+        '<div class="detail-section" style="margin-top:4px"><strong>往届口碑：</strong>' + h.口碑 + '</div>' +
+        '<div class="salary-info">薪资参考：' + h.salary + '</div>' +
+      '</div>' +
+    '</div>';
+  }
+  list.innerHTML = html;
+}
+
+// ====== 重置 ======
+function resetAll() {
+  activeCity = null;
+  activePrefs.clear();
+  document.getElementById('searchBox').value = '';
+  var btns = document.querySelectorAll('.city-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  var chips = document.querySelectorAll('.pref-chip');
+  for (var j = 0; j < chips.length; j++) chips[j].classList.remove('active');
+  applyFilter();
+}
+
+// ====== 关闭提示 ======
+function dismissTip() {
+  document.getElementById('tipsBanner').style.display = 'none';
+}
+
+// ====== 返回顶部按钮 ======
+window.addEventListener('scroll', function() {
+  var btn = document.getElementById('backToTop');
+  if (window.scrollY > 400) {
+    btn.classList.add('visible');
+  } else {
+    btn.classList.remove('visible');
+  }
+});
+
+// ====== 启动 ======
+initCityGrid();
+applyFilter();
+</script>
+
+</body>
+</html>
